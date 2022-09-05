@@ -2,7 +2,9 @@ const pool = require('../dbHandler');
 
 exports.staff = async (req, res) => {
   try {
-    const staff = await pool.query('SELECT * FROM staff ORDER BY staff_id ASC');
+    const staff = await pool.query(
+      'SELECT * FROM staff JOIN department ON department.department_id = staff.department ORDER BY staff_id ASC'
+    );
     if (staff) {
       return res.json(staff.rows);
     }
@@ -26,12 +28,13 @@ exports.getStaff = async (req, res) => {
 };
 
 exports.addStaff = async (req, res) => {
-  const { staff_name, staff_email, staff_phone, staff_image } = req.body;
+  const { staff_name, staff_email, staff_phone, staff_image, department } =
+    req.body;
 
   try {
     const staff = await pool.query(
-      'INSERT INTO staff(staff_name, staff_email, staff_phone, staff_image) VALUES($1, $2, $3, $4)',
-      [staff_name, staff_email, staff_phone, staff_image]
+      'INSERT INTO staff(staff_name, staff_email, staff_phone, staff_image) VALUES($1, $2, $3, $4, $5)',
+      [staff_name, staff_email, staff_phone, staff_image, department]
     );
     if (staff) {
       return res.status(200).json('Staff added successfully!');

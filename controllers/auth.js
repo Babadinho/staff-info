@@ -59,6 +59,7 @@ exports.login = async (req, res) => {
         user: {
           id: user.rows[0].id,
           username: user.rows[0].name,
+          status: user.rows[0].status,
         },
       });
     });
