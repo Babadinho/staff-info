@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { getDepartments } from '../actions/department';
 import { getStaff } from '../actions/staff';
+import AddStaff from './AddStaff';
 
 const Staff = () => {
   const [departments, setDepartments] = useState();
   const [staff, setStaff] = useState();
+  const [success, setSuccess] = useState(false);
+  const [values, setValues] = useState({
+    staff_name: '',
+    staff_email: '',
+    staff_phone: '',
+    staff_image: '',
+    department: '',
+  });
 
   const loadDepartments = async () => {
     const res = await getDepartments();
@@ -19,7 +28,7 @@ const Staff = () => {
   useEffect(() => {
     loadDepartments();
     loadStaff();
-  }, []);
+  }, [success]);
 
   return (
     <div className='container'>
@@ -50,16 +59,20 @@ const Staff = () => {
               })}
           </ul>
         </div>
-        <button type='button' className='btn btn-dark rounded-0'>
-          Add New Staff
-        </button>
+        <AddStaff
+          departments={departments}
+          values={values}
+          setValues={setValues}
+          success={success}
+          setSuccess={setSuccess}
+        />
       </div>
       <div className='row'>
-        <div className='col-md-3'>
-          {staff &&
-            staff.length > 0 &&
-            staff.map((s, i) => {
-              return (
+        {staff &&
+          staff.length > 0 &&
+          staff.map((s, i) => {
+            return (
+              <div className='col-md-4 col-lg-3 col-sm-12 mb-4'>
                 <div class='card rounded-0' key={i}>
                   <img
                     src={s.staff_image}
@@ -73,9 +86,9 @@ const Staff = () => {
                     <p>{s.staff_phone}</p>
                   </div>
                 </div>
-              );
-            })}
-        </div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

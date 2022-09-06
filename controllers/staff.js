@@ -29,12 +29,27 @@ exports.getStaff = async (req, res) => {
 
 exports.addStaff = async (req, res) => {
   const { staff_name, staff_email, staff_phone, staff_image, department } =
-    req.body;
+    req.body.values;
+
+  if (
+    !staff_name ||
+    !staff_email ||
+    !staff_phone ||
+    !staff_image ||
+    !department
+  )
+    return res.status(400).json('All fields are required!');
 
   try {
     const staff = await pool.query(
-      'INSERT INTO staff(staff_name, staff_email, staff_phone, staff_image) VALUES($1, $2, $3, $4, $5)',
-      [staff_name, staff_email, staff_phone, staff_image, department]
+      'INSERT INTO staff(staff_name, staff_email, staff_phone, staff_image, department) VALUES($1, $2, $3, $4, $5)',
+      [
+        staff_name,
+        staff_email,
+        staff_phone,
+        staff_image,
+        parseInt(department, 10),
+      ]
     );
     if (staff) {
       return res.status(200).json('Staff added successfully!');
