@@ -10,13 +10,13 @@ exports.register = (req, res) => {
 
     const user = req.body;
 
-    //hash password
+    //hash password and INSERT new user
     bcrypt.genSalt(12, function (err, salt) {
       bcrypt.hash(user.password, salt, (err, hash) => {
         user.password = hash;
         const user_data = pool.query(
           'INSERT INTO user_data(name, email, status, password) VALUES($1, $2, $3, $4)',
-          [user.name, user.email, 'admin', user.password]
+          [user.name, user.email, 'user', user.password]
         );
         if (user_data) {
           return res.status(200).json('Registration successfull!');
@@ -44,12 +44,12 @@ exports.login = async (req, res) => {
     if (user.rows.length === 0)
       return res.status(400).send('User does not exist');
 
-    // //match password
+    //match password
     bcrypt.compare(password, user.rows[0].password, function (err, match) {
       if (!match || err) {
         return res.status(400).send('Password is incorrect');
       }
-      //Generate jwt signed token and send as reponse to client
+      //Generate jwt signed token and send user data to client
       let token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: '7d',
       });
