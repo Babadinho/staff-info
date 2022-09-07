@@ -5,3 +5,6 @@ export const getStaff = async () =>
 
 export const addNewStaff = async (staff) =>
   await axios.post(`${process.env.REACT_APP_API}/add`, staff);
+
+export const deleteStaff = async (staffId) =>
+  await axios.post(`${process.env.REACT_APP_API}/delete/${staffId}`);

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getDepartments } from '../actions/department';
-import { getStaff } from '../actions/staff';
+import { getStaff, deleteStaff } from '../actions/staff';
 import AddStaff from './AddStaff';
+import EditStaff from './EditStaff';
 import Select from 'react-select';
+import { Popconfirm, message } from 'antd';
 
 const Staff = () => {
   const [departments, setDepartments] = useState();
   const [selectedOption, setSelectedOption] = useState(null);
   const [staff, setStaff] = useState();
+  const [edit, setEdit] = useState('');
   const [success, setSuccess] = useState(false);
   const [values, setValues] = useState({
     staff_name: '',
@@ -35,6 +38,18 @@ const Staff = () => {
     { value: 5, label: 'IT' },
   ];
 
+  const handleDelete = async (staffId) => {
+    try {
+      const res = await deleteStaff(staffId);
+      message.success(res.data, 4);
+      setSuccess(!success);
+    } catch (err) {
+      if (err.response.status === 400) {
+        message.error(err.response.data, 4);
+      }
+    }
+  };
+
   useEffect(() => {
     loadDepartments();
     loadStaff();
@@ -42,8 +57,8 @@ const Staff = () => {
 
   return (
     <div className='container'>
-      <div className='container mt-5 d-flex align-items-center justify-content-between mb-5 flex-column'>
-        <div className='mb-4'>
+      <div className='container mt-5 row'>
+        <div className='mb-4 col-md-8 col-sm-12 d-flex'>
           <Select
             isMulti
             placeholder='Select Department'
@@ -52,7 +67,7 @@ const Staff = () => {
             options={options}
           />
         </div>
-        <div>
+        <div className='col-md-4 col-sm-12 d-md-flex justify-content-end mb-4'>
           <AddStaff
             departments={departments}
             values={values}
@@ -60,33 +75,15 @@ const Staff = () => {
             success={success}
             setSuccess={setSuccess}
           />
+          <EditStaff
+            departments={departments}
+            values={values}
+            edit={edit}
+            setValues={setValues}
+            success={success}
+            setSuccess={setSuccess}
+          />
         </div>
-        {/* <div className='dropdown'>
-          <button
-            className='btn btn-dark dropdown-toggle rounded-0'
-            type='button'
-            data-bs-toggle='dropdown'
-            aria-expanded='false'
-          >
-            Select Department
-          </button>
-          <ul className='dropdown-menu'>
-            {departments &&
-              departments.length > 0 &&
-              departments.map((department, i) => {
-                return (
-                  <li key={i}>
-                    <a
-                      className='dropdown-item'
-                      href={department.department_id}
-                    >
-                      {department.department_name}
-                    </a>
-                  </li>
-                );
-              })}
-          </ul>
-        </div> */}
       </div>
       <div className='row'>
         {staff &&
@@ -110,8 +107,26 @@ const Staff = () => {
                         {s.staff_phone}
                       </p>
                       <div>
-                        <span className='badge text-bg-warning me-2'>Edit</span>
-                        <span className='badge text-bg-danger'>Delete</span>
+                        <span
+                          className='badge text-bg-warning me-2'
+                          role='button'
+                          data-bs-toggle='modal'
+                          data-bs-target='#exampleModal2'
+                          onClick={() => setEdit(s)}
+                        >
+                          Edit
+                        </span>
+                        <span className='badge text-bg-danger' role='button'>
+                          <Popconfirm
+                            placement='top'
+                            title='Delete this staff?'
+                            onConfirm={() => handleDelete(s.staff_id)}
+                            okText='Yes'
+                            cancelText='No'
+                          >
+                            Delete
+                          </Popconfirm>
+                        </span>
                       </div>
                     </div>
                   </div>

@@ -1,9 +1,15 @@
-import axios from 'axios';
 import { addNewStaff } from '../actions/staff';
 import { message } from 'antd';
 import { useState } from 'react';
 
-const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
+const AddStaff = ({ departments, edit, success, setSuccess }) => {
+  const [values, setValues] = useState({
+    staff_name: '',
+    staff_email: '',
+    staff_phone: '',
+    staff_image: '',
+    department: '',
+  });
   const { staff_name, staff_email, staff_phone, staff_image, department } =
     values;
   const [error, setError] = useState();
@@ -36,35 +42,11 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
     }
   };
 
-  const generateStaff = () => {
-    axios.get('https://randomuser.me/api/').then((data) => {
-      setValues({
-        staff_name:
-          data.data.results[0].name.first +
-          ' ' +
-          data.data.results[0].name.last,
-        staff_email: data.data.results[0].email,
-        staff_phone: data.data.results[0].phone,
-        staff_image: data.data.results[0].picture.large,
-      });
-      setError('');
-    });
-  };
-
   return (
     <div>
-      <button
-        type='button'
-        className='btn btn-dark rounded-0'
-        data-bs-toggle='modal'
-        data-bs-target='#exampleModal'
-        onClick={() => setModal('')}
-      >
-        Add New Staff
-      </button>
       <div
         className='modal fade'
-        id='exampleModal'
+        id='exampleModal2'
         tabIndex='-1'
         aria-labelledby='exampleModalLabel'
         aria-hidden='true'
@@ -73,7 +55,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
           <div className='modal-content'>
             <div className='modal-header'>
               <h5 className='modal-title' id='exampleModalLabel'>
-                Add New Staff
+                Edit Staff
               </h5>
               <button
                 type='button'
@@ -91,7 +73,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff name'
-                    value={staff_name}
+                    value={edit && edit.staff_name}
                     onChange={handleChange('staff_name')}
                   />
                 </div>
@@ -101,7 +83,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff email'
-                    value={staff_email}
+                    value={edit && edit.staff_email}
                     onChange={handleChange('staff_email')}
                   />
                 </div>
@@ -111,7 +93,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff phone'
-                    value={staff_phone}
+                    value={edit && edit.staff_phone}
                     onChange={handleChange('staff_phone')}
                   />
                 </div>
@@ -121,7 +103,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff name'
-                    value={staff_image}
+                    value={edit && edit.staff_image}
                     onChange={handleChange('staff_image')}
                   />
                 </div>
@@ -131,7 +113,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                     className='form-select shadow-none rounded-0'
                     aria-label='Default select example'
                     onChange={handleChange('department')}
-                    value={department}
+                    value={edit && edit.department}
                   >
                     <option></option>
                     {departments &&
@@ -148,13 +130,6 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
               </form>
             </div>
             <div className='modal-footer'>
-              <button
-                type='button'
-                className='btn btn-secondary'
-                onClick={generateStaff}
-              >
-                Auto Generate Details
-              </button>
               <button
                 id='modal'
                 type='button'

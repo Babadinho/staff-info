@@ -97,7 +97,7 @@ exports.deleteStaff = async (req, res) => {
       await pool.query('DELETE FROM staff WHERE staff_id=($1)', [staff_id]);
       return res.status(200).json('Staff deleted successfully!');
     } else {
-      res.status(200).json('Staff does not exist!');
+      res.status(400).json('Staff does not exist!');
     }
   } catch (err) {
     res.json(err);
