@@ -3,7 +3,8 @@ const pool = require('../dbHandler');
 exports.staff = async (req, res) => {
   try {
     const staff = await pool.query(
-      'SELECT * FROM staff JOIN department ON department.department_id = staff.department ORDER BY staff_id DESC'
+      'SELECT * FROM staff JOIN department ON department.department_id = staff.department WHERE department_id IN ($1, $2) ORDER BY staff_id DESC',
+      [1, 2]
     );
     if (staff) {
       return res.json(staff.rows);
@@ -62,20 +63,27 @@ exports.addStaff = async (req, res) => {
 exports.updateStaff = (req, res) => {
   const { staff_id } = req.params;
 
+  req.body.values.department = parseInt(req.body.values.department, 10);
+
   try {
-    const keys = ['staff_name', 'staff_email', 'staff_phone', 'staff_image'];
+    const keys = [
+      'staff_name',
+      'staff_email',
+      'staff_phone',
+      'staff_image',
+      'department',
+    ];
     const fields = [];
 
     keys.forEach((key) => {
-      if (req.body[key]) fields.push(key);
+      if (req.body.values[key]) fields.push(key);
     });
 
     fields.forEach((field, index) => {
       pool.query(`UPDATE staff SET ${field}=($1) WHERE staff_id=($2)`, [
-        req.body[field],
+        req.body.values[field],
         staff_id,
       ]);
-
       if (field && index === fields.length - 1) {
         res.status(200).json('Staff updated successfully!');
       }

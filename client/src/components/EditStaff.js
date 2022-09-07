@@ -1,8 +1,11 @@
-import { addNewStaff } from '../actions/staff';
+import { editStaff } from '../actions/staff';
 import { message } from 'antd';
 import { useState } from 'react';
+import { isAuthenticated } from '../actions/auth';
 
-const AddStaff = ({ departments, edit, success, setSuccess }) => {
+const EditStaff = ({ departments, edit, success, setSuccess }) => {
+  const { token } = isAuthenticated();
+
   const [values, setValues] = useState({
     staff_name: '',
     staff_email: '',
@@ -12,8 +15,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
   });
   const { staff_name, staff_email, staff_phone, staff_image, department } =
     values;
-  const [error, setError] = useState();
-  const [modal, setModal] = useState();
+  const [error, setError] = useState('');
 
   const handleChange = (name) => (e) => {
     setValues({ ...values, [name]: e.target.value });
@@ -22,15 +24,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await addNewStaff({ values });
-      setModal('modal');
-      setValues({
-        staff_name: '',
-        staff_email: '',
-        staff_phone: '',
-        staff_image: '',
-        department: '',
-      });
+      const res = await editStaff(edit && edit.staff_id, { values, token });
       setSuccess(!success);
       setError('');
       message.success(res.data, 4);
@@ -73,7 +67,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff name'
-                    value={edit && edit.staff_name}
+                    value={staff_name ? staff_name : edit && edit.staff_name}
                     onChange={handleChange('staff_name')}
                   />
                 </div>
@@ -83,7 +77,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff email'
-                    value={edit && edit.staff_email}
+                    value={staff_email ? staff_email : edit && edit.staff_email}
                     onChange={handleChange('staff_email')}
                   />
                 </div>
@@ -93,7 +87,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff phone'
-                    value={edit && edit.staff_phone}
+                    value={staff_phone ? staff_phone : edit && edit.staff_phone}
                     onChange={handleChange('staff_phone')}
                   />
                 </div>
@@ -103,7 +97,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
                     type='text'
                     className='form-control shadow-none rounded-0'
                     placeholder='Enter staff name'
-                    value={edit && edit.staff_image}
+                    value={staff_image ? staff_image : edit && edit.staff_image}
                     onChange={handleChange('staff_image')}
                   />
                 </div>
@@ -113,7 +107,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
                     className='form-select shadow-none rounded-0'
                     aria-label='Default select example'
                     onChange={handleChange('department')}
-                    value={edit && edit.department}
+                    value={department ? department : edit && edit.department}
                   >
                     <option></option>
                     {departments &&
@@ -134,7 +128,7 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
                 id='modal'
                 type='button'
                 className='btn btn-primary'
-                data-bs-dismiss={modal && 'modal'}
+                data-bs-dismiss={!error && 'modal'}
                 onClick={handleSubmit}
               >
                 Submit
@@ -147,4 +141,4 @@ const AddStaff = ({ departments, edit, success, setSuccess }) => {
   );
 };
 
-export default AddStaff;
+export default EditStaff;
