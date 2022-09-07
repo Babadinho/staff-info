@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.css-1s2u09g-control {
+  border-radius: 0 !important;
+  padding: 2px;
+  border: 1px solid grey !important;
+}
+
+.css-1pahdxg-control {
+  border-radius: 0 !important;
+  padding: 2px;
+  border-color: 1px solid #000 !important;
+}

@@ -63,26 +63,26 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
         Add New Staff
       </button>
       <div
-        class='modal fade'
+        className='modal fade'
         id='exampleModal'
-        tabindex='-1'
+        tabIndex='-1'
         aria-labelledby='exampleModalLabel'
         aria-hidden='true'
       >
-        <div class='modal-dialog'>
-          <div class='modal-content'>
-            <div class='modal-header'>
-              <h5 class='modal-title' id='exampleModalLabel'>
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title' id='exampleModalLabel'>
                 Add New Staff
               </h5>
               <button
                 type='button'
-                class='btn-close'
+                className='btn-close'
                 data-bs-dismiss='modal'
                 aria-label='Close'
               ></button>
             </div>
-            <div class='modal-body'>
+            <div className='modal-body'>
               <div className='text-danger text-center'>{error}</div>
               <form onSubmit={handleSubmit}>
                 <div className='form-group mb-4 col-md-8 mx-auto'>
@@ -128,7 +128,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                 <div className='form-group mb-4 col-md-8 mx-auto'>
                   <h6>Department</h6>
                   <select
-                    class='form-select shadow-none rounded-0'
+                    className='form-select shadow-none rounded-0'
                     aria-label='Default select example'
                     onChange={handleChange('department')}
                     value={department}
@@ -147,10 +147,10 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                 </div>
               </form>
             </div>
-            <div class='modal-footer'>
+            <div className='modal-footer'>
               <button
                 type='button'
-                class='btn btn-secondary'
+                className='btn btn-secondary'
                 onClick={generateStaff}
               >
                 Auto Generate Details
@@ -158,7 +158,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
               <button
                 id='modal'
                 type='button'
-                class='btn btn-primary'
+                className='btn btn-primary'
                 data-bs-dismiss={modal && 'modal'}
                 onClick={handleSubmit}
               >
