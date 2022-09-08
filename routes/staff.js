@@ -10,7 +10,7 @@ const {
 } = require('../controllers/staff');
 
 // routes
-router.get('/staff', staff);
+router.post('/staff', staff);
 router.get('/:staff_id', getStaff);
 router.post('/add', addStaff);
 router.put('/update/:staff_id', updateStaff);

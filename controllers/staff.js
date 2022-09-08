@@ -3,8 +3,7 @@ const pool = require('../dbHandler');
 exports.staff = async (req, res) => {
   try {
     const staff = await pool.query(
-      'SELECT * FROM staff JOIN department ON department.department_id = staff.department WHERE department_id IN ($1, $2) ORDER BY staff_id DESC',
-      [1, 2]
+      'SELECT * FROM staff JOIN department ON department.department_id = staff.department ORDER BY staff_id DESC'
     );
     if (staff) {
       return res.json(staff.rows);

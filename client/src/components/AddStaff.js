@@ -2,12 +2,13 @@ import axios from 'axios';
 import { addNewStaff } from '../actions/staff';
 import { message } from 'antd';
 import { useState } from 'react';
+import { isAuthenticated } from '../actions/auth';
 
 const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
+  const { user } = isAuthenticated();
   const { staff_name, staff_email, staff_phone, staff_image, department } =
     values;
   const [error, setError] = useState();
-  const [modal, setModal] = useState();
 
   const handleChange = (name) => (e) => {
     setValues({ ...values, [name]: e.target.value });
@@ -17,7 +18,6 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
     e.preventDefault();
     try {
       const res = await addNewStaff({ values });
-      setModal('modal');
       setValues({
         staff_name: '',
         staff_email: '',
@@ -53,15 +53,17 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
 
   return (
     <div>
-      <button
-        type='button'
-        className='btn btn-dark rounded-0'
-        data-bs-toggle='modal'
-        data-bs-target='#exampleModal'
-        onClick={() => setModal('')}
-      >
-        Add New Staff
-      </button>
+      {user && user.status === 'admin' && (
+        <button
+          type='button'
+          className='btn btn-dark rounded-0'
+          data-bs-toggle='modal'
+          data-bs-target='#exampleModal'
+          onClick={() => setError('')}
+        >
+          Add New Staff
+        </button>
+      )}
       <div
         className='modal fade'
         id='exampleModal'
@@ -159,7 +161,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                 id='modal'
                 type='button'
                 className='btn btn-primary'
-                data-bs-dismiss={modal && 'modal'}
+                data-bs-dismiss={!error && 'modal'}
                 onClick={handleSubmit}
               >
                 Submit

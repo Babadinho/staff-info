@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { getDepartments } from '../actions/department';
+import { getDepartments, getDepartment } from '../actions/department';
 import { getStaff, deleteStaff } from '../actions/staff';
 import AddStaff from './AddStaff';
 import EditStaff from './EditStaff';
 import Select from 'react-select';
+import { isAuthenticated } from '../actions/auth';
 import { Popconfirm, message } from 'antd';
 
 const Staff = () => {
+  const { user } = isAuthenticated();
   const [departments, setDepartments] = useState();
   const [selectedOption, setSelectedOption] = useState(null);
   const [staff, setStaff] = useState();
@@ -30,12 +32,26 @@ const Staff = () => {
     setStaff(res.data);
   };
 
+  const handleSelect = async (selectedOption) => {
+    setSelectedOption(selectedOption);
+    if (selectedOption.value === 6) {
+      return await loadStaff();
+    }
+    try {
+      const res = await getDepartment(selectedOption && selectedOption.value);
+      setStaff(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const options = [
     { value: 1, label: 'Human Resources' },
     { value: 2, label: 'Accounting and Finance' },
     { value: 3, label: 'Marketing' },
     { value: 4, label: 'Production' },
     { value: 5, label: 'IT' },
+    { value: 6, label: 'All Departments' },
   ];
 
   const handleDelete = async (staffId) => {
@@ -60,10 +76,9 @@ const Staff = () => {
       <div className='container mt-5 row'>
         <div className='mb-4 col-md-8 col-sm-12 d-flex'>
           <Select
-            isMulti
             placeholder='Select Department'
             defaultValue={selectedOption}
-            onChange={setSelectedOption}
+            onChange={handleSelect}
             options={options}
           />
         </div>
@@ -106,28 +121,30 @@ const Staff = () => {
                         <i className='fa-solid fa-mobile pe-2'></i>
                         {s.staff_phone}
                       </p>
-                      <div>
-                        <span
-                          className='badge text-bg-warning me-2'
-                          role='button'
-                          data-bs-toggle='modal'
-                          data-bs-target='#exampleModal2'
-                          onClick={() => setEdit(s)}
-                        >
-                          Edit
-                        </span>
-                        <span className='badge text-bg-danger' role='button'>
-                          <Popconfirm
-                            placement='top'
-                            title='Delete this staff?'
-                            onConfirm={() => handleDelete(s.staff_id)}
-                            okText='Yes'
-                            cancelText='No'
+                      {user && user.status === 'admin' && (
+                        <div>
+                          <span
+                            className='badge text-bg-warning me-2'
+                            role='button'
+                            data-bs-toggle='modal'
+                            data-bs-target='#exampleModal2'
+                            onClick={() => setEdit(s)}
                           >
-                            Delete
-                          </Popconfirm>
-                        </span>
-                      </div>
+                            Edit
+                          </span>
+                          <span className='badge text-bg-danger' role='button'>
+                            <Popconfirm
+                              placement='top'
+                              title='Delete this staff?'
+                              onConfirm={() => handleDelete(s.staff_id)}
+                              okText='Yes'
+                              cancelText='No'
+                            >
+                              Delete
+                            </Popconfirm>
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
