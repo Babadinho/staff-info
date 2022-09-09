@@ -5,7 +5,8 @@ import AddStaff from './AddStaff';
 import EditStaff from './EditStaff';
 import Select from 'react-select';
 import { isAuthenticated } from '../actions/auth';
-import { Popconfirm, message } from 'antd';
+import { Popconfirm, Tooltip, message } from 'antd';
+import { CSVLink } from 'react-csv';
 
 const Staff = () => {
   const { user } = isAuthenticated();
@@ -82,7 +83,7 @@ const Staff = () => {
             options={options}
           />
         </div>
-        <div className='col-md-4 col-sm-12 d-md-flex justify-content-end mb-4'>
+        <div className='col-md-4 col-sm-12 d-md-flex align-items-center justify-content-end mb-4'>
           <AddStaff
             departments={departments}
             values={values}
@@ -90,6 +91,26 @@ const Staff = () => {
             success={success}
             setSuccess={setSuccess}
           />
+          <Tooltip
+            placement='top'
+            title={
+              selectedOption
+                ? 'Export ' + selectedOption.label + ' staff to csv'
+                : 'Export all staff to csv!'
+            }
+          >
+            <CSVLink
+              data={staff ? staff : ''}
+              filename={'staff-info.csv'}
+              target='_blank'
+              className='text-dark'
+              data-bs-toggle='tooltip'
+              data-bs-placement='top'
+              data-bs-title='Tooltip on top'
+            >
+              <i class='fa-solid fa-file-csv fa-2x ms-2'></i>
+            </CSVLink>
+          </Tooltip>
           <EditStaff
             departments={departments}
             values={values}

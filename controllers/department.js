@@ -18,7 +18,7 @@ exports.getDepartment = async (req, res) => {
   const id = req.params.departmentId;
   try {
     const staff = await pool.query(
-      'SELECT * FROM staff WHERE department = $1 ORDER BY staff_id DESC',
+      'SELECT * FROM staff JOIN department ON department.department_id = staff.department WHERE department = $1 ORDER BY staff_id DESC',
       [id]
     );
     if (staff) {

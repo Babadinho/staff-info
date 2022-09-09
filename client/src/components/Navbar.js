@@ -13,7 +13,11 @@ const Navbar = () => {
     <div>
       <nav className='navbar bg-dark'>
         <div className='container-fluid'>
-          <span className='navbar-brand mb-0 h1 text-white'>
+          <span
+            className='navbar-brand mb-0 h1 text-white'
+            role='button'
+            onClick={() => window.location.reload()}
+          >
             Staff Information
           </span>
           {user && (
