@@ -55,7 +55,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
       {user && user.status === 'admin' && (
         <button
           type='button'
-          className='btn btn-dark rounded-0'
+          className='btn btn-dark rounded-0 ms-4'
           data-bs-toggle='modal'
           data-bs-target='#exampleModal'
           onClick={() => setError('')}

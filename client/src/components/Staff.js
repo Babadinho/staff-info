@@ -74,16 +74,14 @@ const Staff = () => {
 
   return (
     <div className='container'>
-      <div className='container mt-5 row'>
-        <div className='mb-4 col-md-8 col-sm-12 d-flex'>
+      <div className='container mt-5 row mx-auto'>
+        <div className='mb-4 col-md-8 col-sm-12 d-flex align-items-center'>
           <Select
             placeholder='Select Department'
             defaultValue={selectedOption}
             onChange={handleSelect}
             options={options}
           />
-        </div>
-        <div className='col-md-4 col-sm-12 d-md-flex align-items-center justify-content-end mb-4'>
           <AddStaff
             departments={departments}
             values={values}
@@ -91,6 +89,8 @@ const Staff = () => {
             success={success}
             setSuccess={setSuccess}
           />
+        </div>
+        <div className='col-md-4 col-sm-12 d-md-flex align-items-center justify-content-end mb-4'>
           <Tooltip
             placement='top'
             title={
