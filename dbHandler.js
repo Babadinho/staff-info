@@ -4,6 +4,12 @@ const connectionString = `postgresql://${process.env.USER}:${process.env.PASSWOR
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+if (connectionString) {
+  console.log('Connected locally');
+} else if (isProduction) {
+  console.log('Connected in producton');
+}
+
 const pool = new Pool({
   connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
   ssl: {
