@@ -25,7 +25,6 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
         staff_image: '',
         department: '',
       });
-      res && setError('');
       setSuccess(!success);
       message.success(res.data, 4);
     } catch (err) {
@@ -161,7 +160,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                 id='modal'
                 type='button'
                 className='btn btn-primary'
-                data-bs-dismiss={error ? 'modal' : ''}
+                data-bs-dismiss={!error ? 'modal' : ''}
                 onClick={handleSubmit}
               >
                 Submit
