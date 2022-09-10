@@ -160,7 +160,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                 id='modal'
                 type='button'
                 className='btn btn-primary'
-                data-bs-dismiss={!error ? 'modal' : ''}
+                data-bs-dismiss={error ? 'modal' : ''}
                 onClick={handleSubmit}
               >
                 Submit
