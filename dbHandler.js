@@ -6,17 +6,6 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const pool = new Pool({
   connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
-
-// const pool = new Pool({
-//   host: 'localhost',
-//   user: process.env.USER,
-//   database: process.env.DATABASE,
-//   password: process.env.PASSWORD,
-//   port: process.env.PORT,
-// });
 
 module.exports = pool;
