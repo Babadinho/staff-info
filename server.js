@@ -14,7 +14,7 @@ app.use(cors({ origin: process.env.CLIENT_URL }));
 
 //route middleware
 fs.readdirSync('./routes').map((routes) =>
-  app.use('', require(`./routes/${routes}`))
+  app.use('/api', require(`./routes/${routes}`))
 );
 
 if (process.env.NODE_ENV === 'production') {
