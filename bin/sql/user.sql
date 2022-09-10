@@ -8,6 +8,10 @@
 --     password VARCHAR(500) UNIQUE NOT NULL
 -- );
 
+-- UPDATE user_data 
+-- SET status = 'admin' 
+-- WHERE  id = 2;
+
 SELECT *
 FROM
-user_data
+user_data;
