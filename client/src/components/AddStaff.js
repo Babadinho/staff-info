@@ -25,6 +25,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
         staff_image: '',
         department: '',
       });
+      res && setError('');
       setSuccess(!success);
       message.success(res.data, 4);
     } catch (err) {
