@@ -18,13 +18,13 @@ fs.readdirSync('./routes').map((routes) =>
   app.use('/api', require(`./routes/${routes}`))
 );
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'build')));
+// Other app.use middleware
+app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-  app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-  });
-}
+// Right before your app.listen(), add this:
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+});
 
 const port = process.env.APP_PORT || 5000;
 app.listen(port, () => console.log(`API is running on port ${port}`));
