@@ -58,7 +58,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
           className='btn btn-dark rounded-0 ms-4'
           data-bs-toggle='modal'
           data-bs-target='#exampleModal'
-          onClick={() => setError('')}
+          // onClick={() => setError('')}
         >
           Add New Staff
         </button>
