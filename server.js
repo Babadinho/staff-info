@@ -9,7 +9,7 @@ const app = express();
 // app middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(cors({ origin: process.env.CLIENT_URL }));
+app.use(cors({ origin: 'https://staff-info.vercel.app' }));
 
 //route middleware
 fs.readdirSync('./routes').map((routes) =>
