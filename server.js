@@ -21,5 +21,5 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, './client/build')));
 }
 
-const port = process.env.APP_PORT || 8000;
+const port = process.env.APP_PORT || 5000;
 app.listen(port, () => console.log(`API is running on port ${port}`));
