@@ -108,7 +108,7 @@ const Staff = () => {
               data-bs-placement='top'
               data-bs-title='Tooltip on top'
             >
-              <i class='fa-solid fa-file-csv fa-2x ms-2'></i>
+              <i className='fa-solid fa-file-csv fa-2x ms-2'></i>
             </CSVLink>
           </Tooltip>
           <EditStaff
