@@ -8,7 +8,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
   const { user } = isAuthenticated();
   const { staff_name, staff_email, staff_phone, staff_image, department } =
     values;
-  const [error, setError] = useState();
+  const [error, setError] = useState('');
 
   const handleChange = (name) => (e) => {
     setValues({ ...values, [name]: e.target.value });
@@ -160,7 +160,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
                 id='modal'
                 type='button'
                 className='btn btn-primary'
-                data-bs-dismiss={error ? 'modal' : ''}
+                data-bs-dismiss={!error ? 'modal' : ''}
                 onClick={handleSubmit}
               >
                 Submit

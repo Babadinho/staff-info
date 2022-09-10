@@ -8,7 +8,7 @@ echo "Configuring database: $database"
 # createdb -U node_user staff-info
 
 psql -U node_user staff-info < ./bin/sql/info.sql
-# psql -U node_user staff-info < ./bin/sql/user.sql
-# psql -U node_user staff-info < ./bin/sql/department.sql
+psql -U node_user staff-info < ./bin/sql/user.sql
+psql -U node_user staff-info < ./bin/sql/department.sql
 
 echo "$database configured"
