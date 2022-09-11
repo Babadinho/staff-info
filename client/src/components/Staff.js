@@ -9,7 +9,7 @@ import { Popconfirm, Tooltip, message } from 'antd';
 import { CSVLink } from 'react-csv';
 
 const Staff = () => {
-  const { user } = isAuthenticated();
+  const { user, token } = isAuthenticated();
   const [departments, setDepartments] = useState();
   const [selectedOption, setSelectedOption] = useState(null);
   const [staff, setStaff] = useState();
@@ -24,12 +24,12 @@ const Staff = () => {
   });
 
   const loadDepartments = async () => {
-    const res = await getDepartments();
+    const res = await getDepartments(token);
     setDepartments(res.data);
   };
 
   const loadStaff = async () => {
-    const res = await getStaff();
+    const res = await getStaff(token);
     setStaff(res.data);
   };
 
@@ -39,7 +39,10 @@ const Staff = () => {
       return await loadStaff();
     }
     try {
-      const res = await getDepartment(selectedOption && selectedOption.value);
+      const res = await getDepartment(
+        selectedOption && selectedOption.value,
+        token
+      );
       setStaff(res.data);
     } catch (err) {
       console.log(err);
@@ -57,7 +60,7 @@ const Staff = () => {
 
   const handleDelete = async (staffId) => {
     try {
-      const res = await deleteStaff(staffId);
+      const res = await deleteStaff({ staffId }, token);
       message.success(res.data, 4);
       setSuccess(!success);
     } catch (err) {

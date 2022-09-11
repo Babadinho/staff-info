@@ -24,7 +24,10 @@ const EditStaff = ({ departments, edit, success, setSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await editStaff(edit && edit.staff_id, { values, token });
+      const res = await editStaff(
+        { staff_id: edit && edit.staff_id, values },
+        token
+      );
       setSuccess(!success);
       setError('');
       message.success(res.data, 4);

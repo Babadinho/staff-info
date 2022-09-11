@@ -1,6 +1,7 @@
 const pool = require('../dbHandler');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { expressjwt: expressJwt } = require('express-jwt');
 
 exports.register = (req, res) => {
   const { name, email, password } = req.body;
@@ -28,6 +29,11 @@ exports.register = (req, res) => {
     return res.status(400).send('Error. Try again');
   }
 };
+
+exports.requireSignin = expressJwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ['HS256'],
+});
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;

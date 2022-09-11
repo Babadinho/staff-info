@@ -60,7 +60,7 @@ exports.addStaff = async (req, res) => {
 };
 
 exports.updateStaff = (req, res) => {
-  const { staff_id } = req.params;
+  const { staff_id } = req.body;
 
   req.body.values.department = parseInt(req.body.values.department, 10);
 
@@ -93,15 +93,15 @@ exports.updateStaff = (req, res) => {
 };
 
 exports.deleteStaff = async (req, res) => {
-  const { staff_id } = req.params;
+  const { staffId } = req.body;
 
   try {
     const staff = await pool.query('SELECT * FROM staff WHERE staff_id=($1)', [
-      staff_id,
+      staffId,
     ]);
-    console.log(staff.rows);
+
     if (staff.rows.length !== 0) {
-      await pool.query('DELETE FROM staff WHERE staff_id=($1)', [staff_id]);
+      await pool.query('DELETE FROM staff WHERE staff_id=($1)', [staffId]);
       return res.status(200).json('Staff deleted successfully!');
     } else {
       res.status(400).json('Staff does not exist!');

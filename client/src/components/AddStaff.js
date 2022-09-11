@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { isAuthenticated } from '../actions/auth';
 
 const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
-  const { user } = isAuthenticated();
+  const { user, token } = isAuthenticated();
   const { staff_name, staff_email, staff_phone, staff_image, department } =
     values;
   const [error, setError] = useState('');
@@ -27,7 +27,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await addNewStaff({ values });
+      const res = await addNewStaff({ values }, token);
       setValues({
         staff_name: '',
         staff_email: '',
