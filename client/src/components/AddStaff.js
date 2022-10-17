@@ -29,7 +29,7 @@ const AddStaff = ({
   isOpen,
   onClose,
 }) => {
-  const { user, token } = isAuthenticated();
+  const { token } = isAuthenticated();
   const {
     staff_name,
     staff_email,
@@ -85,7 +85,7 @@ const AddStaff = ({
   };
 
   return (
-    <div>
+    <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -173,7 +173,7 @@ const AddStaff = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -27,10 +27,6 @@ const StaffCard = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const handleClick = (s) => {
-    onOpen();
-    setEdit(s);
-  };
   return (
     <div>
       <Center py={2}>
@@ -60,9 +56,8 @@ const StaffCard = ({
                   setEdit(s);
                   onOpen();
                 }}
-                // onClick={handleClick}
               >
-                <i class='fa-solid fa-pen-to-square'></i>{' '}
+                <i className='fa-solid fa-pen-to-square'></i>{' '}
               </Text>
               <Popconfirm
                 placement='top'
@@ -72,7 +67,7 @@ const StaffCard = ({
                 cancelText='No'
               >
                 <Text color={'red.500'}>
-                  <i class='fa-solid fa-trash-can'></i>
+                  <i className='fa-solid fa-trash-can'></i>
                 </Text>
               </Popconfirm>
             </Stack>
@@ -96,7 +91,7 @@ const StaffCard = ({
             color={useColorModeValue('gray.700', 'gray.400')}
             px={3}
           >
-            <i class='fa-solid fa-location-dot'></i> {s.staff_address}
+            <i className='fa-solid fa-location-dot'></i> {s.staff_address}
           </Text>
 
           <Stack
@@ -111,7 +106,7 @@ const StaffCard = ({
               bg={useColorModeValue('gray.50', 'gray.800')}
               fontWeight={'400'}
             >
-              <i class='fa-solid fa-square-phone'></i> &nbsp;{s.staff_phone}
+              <i className='fa-solid fa-square-phone'></i> &nbsp;{s.staff_phone}
             </Badge>
             <Badge
               px={2}
@@ -120,7 +115,7 @@ const StaffCard = ({
               fontWeight={'400'}
               textTransform='Lowercase'
             >
-              <i class='fa-solid fa-envelope'></i> &nbsp;
+              <i className='fa-solid fa-envelope'></i> &nbsp;
               {s.staff_email}
             </Badge>
           </Stack>

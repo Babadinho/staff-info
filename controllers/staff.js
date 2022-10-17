@@ -28,13 +28,20 @@ exports.getStaff = async (req, res) => {
 };
 
 exports.addStaff = async (req, res) => {
-  const { staff_name, staff_email, staff_phone, staff_image, department } =
-    req.body.values;
+  const {
+    staff_name,
+    staff_email,
+    staff_phone,
+    staff_address,
+    staff_image,
+    department,
+  } = req.body.values;
 
   if (
     !staff_name ||
     !staff_email ||
     !staff_phone ||
+    !staff_address ||
     !staff_image ||
     !department
   )
@@ -42,11 +49,12 @@ exports.addStaff = async (req, res) => {
 
   try {
     const staff = await pool.query(
-      'INSERT INTO staff(staff_name, staff_email, staff_phone, staff_image, department) VALUES($1, $2, $3, $4, $5)',
+      'INSERT INTO staff(staff_name, staff_email, staff_phone, staff_address, staff_image, department) VALUES($1, $2, $3, $4, $5, $6)',
       [
         staff_name,
         staff_email,
         staff_phone,
+        staff_address,
         staff_image,
         parseInt(department, 10),
       ]
@@ -69,6 +77,7 @@ exports.updateStaff = (req, res) => {
       'staff_name',
       'staff_email',
       'staff_phone',
+      'staff_address',
       'staff_image',
       'department',
     ];
@@ -105,6 +114,21 @@ exports.deleteStaff = async (req, res) => {
       return res.status(200).json('Staff deleted successfully!');
     } else {
       res.status(400).json('Staff does not exist!');
+    }
+  } catch (err) {
+    res.json(err);
+  }
+};
+
+exports.searchStaff = async (req, res) => {
+  const { search } = req.body;
+
+  try {
+    const staff = await pool.query(
+      `SELECT * FROM staff WHERE staff_name ILIKE '%${search}%'`
+    );
+    if (staff) {
+      return res.json(staff.rows);
     }
   } catch (err) {
     res.json(err);

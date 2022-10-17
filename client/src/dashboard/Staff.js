@@ -13,10 +13,11 @@ import {
   useColorModeValue,
   useDisclosure,
   SimpleGrid,
+  Link,
 } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
 import { getDepartments, getDepartment } from '../actions/department';
-import { getStaff, deleteStaff } from '../actions/staff';
+import { getStaff, deleteStaff, searchStaff } from '../actions/staff';
 import AddStaff from '../components/AddStaff';
 import { message } from 'antd';
 import { isAuthenticated } from '../actions/auth';
@@ -39,7 +40,7 @@ const Staff = () => {
   });
   const sidebar = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedOption, setSelectedOption] = useState(6);
+  const [selectedOption, setSelectedOption] = useState(null);
   const color = useColorModeValue('gray.600', 'gray.300');
   const [search, setSearch] = useState('');
 
@@ -49,7 +50,7 @@ const Staff = () => {
   };
 
   const loadStaff = async () => {
-    if (selectedOption && selectedOption === 6) {
+    if (selectedOption === null || selectedOption === 6) {
       const res = await getStaff(token);
       setStaff(res.data);
     } else {
@@ -78,17 +79,18 @@ const Staff = () => {
   };
 
   const handleSearch = async () => {
-    // try {
-    //   const res = await searchStaff(search, token);
-    //   setStaff(res.data);
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const res = await searchStaff({ search }, token);
+      setStaff(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     loadDepartments();
     loadStaff();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success, selectedOption]);
 
   const handleLogout = () => {
@@ -156,7 +158,7 @@ const Staff = () => {
           _dark={{ color: 'white' }}
           fontWeight='semibold'
         >
-          <i class='fa-solid fa-users'></i> STAFF INFO
+          <i className='fa-solid fa-users'></i> STAFF INFO
         </Text>
       </Flex>
       <Flex
@@ -167,26 +169,57 @@ const Staff = () => {
         aria-label='Main Navigation'
         py='6'
       >
-        <NavItem onClick={() => setSelectedOption(6)}>
-          <i class='fa-solid fa-users'></i> &nbsp;All Departments
+        <NavItem
+          onClick={() => {
+            setSelectedOption(6);
+            sidebar.onClose();
+          }}
+        >
+          <i className='fa-solid fa-users'></i> &nbsp;All Departments
         </NavItem>
-        <NavItem onClick={() => setSelectedOption(1)}>
-          <i class='fa-solid fa-users-viewfinder'></i> &nbsp;Human Resources
+        <NavItem
+          onClick={() => {
+            setSelectedOption(1);
+            sidebar.onClose();
+          }}
+        >
+          <i className='fa-solid fa-users-viewfinder'></i> &nbsp;Human Resources
         </NavItem>
-        <NavItem onClick={() => setSelectedOption(2)}>
-          <i class='fa-solid fa-users-line'></i> &nbsp;Accounting and Finance
+        <NavItem
+          onClick={() => {
+            setSelectedOption(2);
+            sidebar.onClose();
+          }}
+        >
+          <i className='fa-solid fa-users-line'></i> &nbsp;Accounting and
+          Finance
         </NavItem>
-        <NavItem onClick={() => setSelectedOption(3)}>
-          <i class='fa-solid fa-users-rays'></i> &nbsp;Marketing
+        <NavItem
+          onClick={() => {
+            setSelectedOption(3);
+            sidebar.onClose();
+          }}
+        >
+          <i className='fa-solid fa-users-rays'></i> &nbsp;Marketing
         </NavItem>
-        <NavItem onClick={() => setSelectedOption(4)}>
-          <i class='fa-solid fa-people-carry-box'></i> &nbsp;Production
+        <NavItem
+          onClick={() => {
+            setSelectedOption(4);
+            sidebar.onClose();
+          }}
+        >
+          <i className='fa-solid fa-people-carry-box'></i> &nbsp;Production
         </NavItem>
-        <NavItem onClick={() => setSelectedOption(5)}>
-          <i class='fa-solid fa-users-gear'></i> &nbsp;IT
+        <NavItem
+          onClick={() => {
+            setSelectedOption(5);
+            sidebar.onClose();
+          }}
+        >
+          <i className='fa-solid fa-users-gear'></i> &nbsp;IT
         </NavItem>
         <NavItem onClick={handleLogout}>
-          <i class='fa-solid fa-right-from-bracket'></i> &nbsp;Sign out
+          <i className='fa-solid fa-right-from-bracket'></i> &nbsp;Sign out
         </NavItem>
       </Flex>
     </Box>
@@ -221,14 +254,14 @@ const Staff = () => {
               aria-label='Menu'
               display={{ base: 'inline-flex', md: 'none' }}
               onClick={sidebar.onOpen}
-              icon={<i class='fa-solid fa-bars'></i>}
+              icon={<i className='fa-solid fa-bars'></i>}
               size='md'
             />
-            <form onSubmit={() => handleSearch}>
-              <div class='form-group'>
+            <form onSubmit={handleSearch}>
+              <div className='form-group'>
                 <InputGroup w={{ base: '75vw', md: '50vw' }}>
                   <InputLeftElement color='gray.500'>
-                    <i class='fa-solid fa-magnifying-glass'></i>
+                    <i className='fa-solid fa-magnifying-glass'></i>
                   </InputLeftElement>{' '}
                   <Input
                     placeholder='Search for staff...'
@@ -249,7 +282,7 @@ const Staff = () => {
                   return (
                     <StaffCard
                       s={s}
-                      i={i}
+                      key={i}
                       user={user}
                       edit={edit}
                       setEdit={setEdit}
@@ -278,9 +311,11 @@ const Staff = () => {
           setSuccess={setSuccess}
         />
       </Box>
-      <a href='#' class='float' onClick={onOpen}>
-        <i class='fa-solid fa-plus my-float'></i>
-      </a>
+      {user && user.status === 'admin' && (
+        <Link className='float' onClick={onOpen}>
+          <i className='fa-solid fa-plus my-float'></i>
+        </Link>
+      )}
     </>
   );
 };

@@ -69,7 +69,7 @@ const EditStaff = ({
   };
 
   return (
-    <div>
+    <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -156,7 +156,7 @@ const EditStaff = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ const {
   addStaff,
   updateStaff,
   deleteStaff,
+  searchStaff,
 } = require('../controllers/staff');
 const { requireSignin } = require('../controllers/auth');
 
@@ -16,5 +17,6 @@ router.get('/:staff_id', requireSignin, getStaff);
 router.post('/add', requireSignin, addStaff);
 router.put('/update', requireSignin, updateStaff);
 router.post('/delete', requireSignin, deleteStaff);
+router.post('/search', requireSignin, searchStaff);
 
 module.exports = router;
