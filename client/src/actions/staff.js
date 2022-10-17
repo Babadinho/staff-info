@@ -35,3 +35,12 @@ export const editStaff = async (staff_data, token) =>
       Authorization: `Bearer ${token}`,
     },
   });
+
+// export const searchStaff = async (search, token) =>
+//   await axios.post(`${process.env.REACT_APP_API}/search`, search, {
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });

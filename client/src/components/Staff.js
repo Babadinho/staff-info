@@ -8,6 +8,19 @@ import { isAuthenticated } from '../actions/auth';
 import { Popconfirm, Tooltip, message } from 'antd';
 import { CSVLink } from 'react-csv';
 
+import {
+  Heading,
+  Avatar,
+  Box,
+  Center,
+  Text,
+  Stack,
+  Button,
+  Link,
+  Badge,
+  useColorModeValue,
+} from '@chakra-ui/react';
+
 const Staff = () => {
   const { user, token } = isAuthenticated();
   const [departments, setDepartments] = useState();
@@ -19,6 +32,7 @@ const Staff = () => {
     staff_name: '',
     staff_email: '',
     staff_phone: '',
+    staff_address: '',
     staff_image: '',
     department: '',
   });

@@ -1,27 +1,48 @@
 import axios from 'axios';
 import { addNewStaff } from '../actions/staff';
 import { message } from 'antd';
-import { Modal } from '@nextui-org/react';
 import { useState } from 'react';
 import { isAuthenticated } from '../actions/auth';
 
-const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
-  const { user, token } = isAuthenticated();
-  const { staff_name, staff_email, staff_phone, staff_image, department } =
-    values;
-  const [error, setError] = useState('');
-  const [visible, setVisible] = useState(false);
+import {
+  FormControl,
+  Input,
+  Stack,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Select,
+} from '@chakra-ui/react';
 
-  const handler = () => {
-    setVisible(true);
-    setError('');
-  };
-  const closeHandler = () => {
-    setVisible(false);
-  };
+const AddStaff = ({
+  departments,
+  values,
+  setValues,
+  success,
+  setSuccess,
+  isOpen,
+  onClose,
+}) => {
+  const { user, token } = isAuthenticated();
+  const {
+    staff_name,
+    staff_email,
+    staff_phone,
+    staff_address,
+    staff_image,
+    department,
+  } = values;
+  const [error, setError] = useState('');
 
   const handleChange = (name) => (e) => {
     setValues({ ...values, [name]: e.target.value });
+    setError('');
   };
 
   const handleSubmit = async (e) => {
@@ -32,10 +53,11 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
         staff_name: '',
         staff_email: '',
         staff_phone: '',
+        staff_address: '',
         staff_image: '',
         department: '',
       });
-      res && setVisible(false);
+      res && onClose();
       setSuccess(!success);
       message.success(res.data, 4);
     } catch (err) {
@@ -55,6 +77,7 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
           data.data.results[0].name.last,
         staff_email: data.data.results[0].email,
         staff_phone: data.data.results[0].phone,
+        staff_address: `${data.data.results[0].location.street.number} ${data.data.results[0].location.street.name}, ${data.data.results[0].location.city} ${data.data.results[0].location.state} ${data.data.results[0].location.postcode}, ${data.data.results[0].location.country}`,
         staff_image: data.data.results[0].picture.large,
       });
       setError('');
@@ -63,106 +86,92 @@ const AddStaff = ({ departments, values, setValues, success, setSuccess }) => {
 
   return (
     <div>
-      {user && user.status === 'admin' && (
-        <button
-          type='button'
-          className='btn btn-dark rounded-0 ms-4'
-          onClick={handler}
-        >
-          Add New Staff
-        </button>
-      )}
-      <Modal
-        closeButton
-        aria-labelledby='modal-title'
-        open={visible}
-        onClose={closeHandler}
-      >
-        <Modal.Header>
-          <h5 className='modal-title'>Add New Staff</h5>
-        </Modal.Header>
-        <Modal.Body>
-          <div className='text-danger text-center'>{error}</div>
-          <form onSubmit={handleSubmit}>
-            <div className='form-group mb-4 col-md-8 mx-auto'>
-              <label className='form-label'>Staff Name</label>
-              <input
-                type='text'
-                className='form-control shadow-none rounded-0'
-                placeholder='Enter staff name'
-                value={staff_name}
-                onChange={handleChange('staff_name')}
-              />
-            </div>
-            <div className='form-group mb-4 col-md-8 mx-auto'>
-              <label className='form-label'>Staff Email</label>
-              <input
-                type='text'
-                className='form-control shadow-none rounded-0'
-                placeholder='Enter staff email'
-                value={staff_email}
-                onChange={handleChange('staff_email')}
-              />
-            </div>
-            <div className='form-group mb-4 col-md-8 mx-auto'>
-              <label className='form-label'>Staff Phone</label>
-              <input
-                type='text'
-                className='form-control shadow-none rounded-0'
-                placeholder='Enter staff phone'
-                value={staff_phone}
-                onChange={handleChange('staff_phone')}
-              />
-            </div>
-            <div className='form-group mb-4 col-md-8 mx-auto'>
-              <label className='form-label'>Staff Image</label>
-              <input
-                type='text'
-                className='form-control shadow-none rounded-0'
-                placeholder='Enter staff name'
-                value={staff_image}
-                onChange={handleChange('staff_image')}
-              />
-            </div>
-            <div className='form-group mb-4 col-md-8 mx-auto'>
-              <h6>Department</h6>
-              <select
-                className='form-select shadow-none rounded-0'
-                aria-label='Default select example'
-                onChange={handleChange('department')}
-                value={department}
-              >
-                <option></option>
-                {departments &&
-                  departments.length > 0 &&
-                  departments.map((d, i) => {
-                    return (
-                      <option key={i} value={d.department_id}>
-                        {d.department_name}
-                      </option>
-                    );
-                  })}
-              </select>
-            </div>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <button
-            type='button'
-            className='btn btn-secondary'
-            onClick={generateStaff}
-          >
-            Auto Generate Details
-          </button>
-          <button
-            id='modal'
-            type='button'
-            className='btn btn-primary'
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
-        </Modal.Footer>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Staff</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text color={'red'} mb='4' align='center'>
+              {error}
+            </Text>
+            <Stack spacing={4}>
+              <FormControl id='staff_name'>
+                <Input
+                  type='text'
+                  placeholder='Name'
+                  value={staff_name}
+                  onChange={handleChange('staff_name')}
+                />
+              </FormControl>
+              <FormControl id='staff_email'>
+                <Input
+                  type='email'
+                  placeholder='Email'
+                  value={staff_email}
+                  onChange={handleChange('staff_email')}
+                />
+              </FormControl>
+              <FormControl id='staff_phone'>
+                <Input
+                  type='text'
+                  placeholder='Phone'
+                  value={staff_phone}
+                  onChange={handleChange('staff_phone')}
+                />
+              </FormControl>
+              <FormControl id='staff_address'>
+                <Input
+                  type='text'
+                  placeholder='Address'
+                  value={staff_address}
+                  onChange={handleChange('staff_address')}
+                />
+              </FormControl>
+              <FormControl id='staff_image'>
+                <Input
+                  type='text'
+                  placeholder='Image'
+                  value={staff_image}
+                  onChange={handleChange('staff_image')}
+                />
+              </FormControl>
+              <FormControl id='staff_department'>
+                <Select
+                  onChange={handleChange('department')}
+                  value={department}
+                  placeholder='Select department'
+                >
+                  {departments &&
+                    departments.length > 0 &&
+                    departments.map((d, i) => {
+                      return (
+                        <option key={i} value={d.department_id}>
+                          {d.department_name}
+                        </option>
+                      );
+                    })}
+                </Select>
+              </FormControl>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant='ghost' mr={3} onClick={generateStaff}>
+              Generate random details
+            </Button>
+            <Button
+              bg='blue.600'
+              color='white'
+              onClick={handleSubmit}
+              _hover={{
+                bg: 'blue.500',
+              }}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </div>
   );

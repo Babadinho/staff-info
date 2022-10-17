@@ -2,19 +2,47 @@ import { editStaff } from '../actions/staff';
 import { message } from 'antd';
 import { useState } from 'react';
 import { isAuthenticated } from '../actions/auth';
+import {
+  FormControl,
+  Input,
+  Stack,
+  Text,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Select,
+} from '@chakra-ui/react';
 
-const EditStaff = ({ departments, edit, success, setSuccess }) => {
+const EditStaff = ({
+  departments,
+  edit,
+  success,
+  setSuccess,
+  isOpen,
+  onClose,
+}) => {
   const { token } = isAuthenticated();
-
   const [values, setValues] = useState({
     staff_name: '',
     staff_email: '',
     staff_phone: '',
+    staff_address: '',
     staff_image: '',
     department: '',
   });
-  const { staff_name, staff_email, staff_phone, staff_image, department } =
-    values;
+  const {
+    staff_name,
+    staff_email,
+    staff_phone,
+    staff_address,
+    staff_image,
+    department,
+  } = values;
   const [error, setError] = useState('');
 
   const handleChange = (name) => (e) => {
@@ -30,6 +58,7 @@ const EditStaff = ({ departments, edit, success, setSuccess }) => {
       );
       setSuccess(!success);
       setError('');
+      onClose();
       message.success(res.data, 4);
     } catch (err) {
       console.log(err);
@@ -41,105 +70,92 @@ const EditStaff = ({ departments, edit, success, setSuccess }) => {
 
   return (
     <div>
-      <div
-        className='modal fade'
-        id='exampleModal2'
-        tabIndex='-1'
-        aria-labelledby='exampleModalLabel'
-        aria-hidden='true'
-      >
-        <div className='modal-dialog'>
-          <div className='modal-content'>
-            <div className='modal-header'>
-              <h5 className='modal-title' id='exampleModalLabel'>
-                Edit Staff
-              </h5>
-              <button
-                type='button'
-                className='btn-close'
-                data-bs-dismiss='modal'
-                aria-label='Close'
-              ></button>
-            </div>
-            <div className='modal-body'>
-              <div className='text-danger text-center'>{error}</div>
-              <form onSubmit={handleSubmit}>
-                <div className='form-group mb-4 col-md-8 mx-auto'>
-                  <label className='form-label'>Staff Name</label>
-                  <input
-                    type='text'
-                    className='form-control shadow-none rounded-0'
-                    placeholder='Enter staff name'
-                    value={staff_name ? staff_name : edit && edit.staff_name}
-                    onChange={handleChange('staff_name')}
-                  />
-                </div>
-                <div className='form-group mb-4 col-md-8 mx-auto'>
-                  <label className='form-label'>Staff Email</label>
-                  <input
-                    type='text'
-                    className='form-control shadow-none rounded-0'
-                    placeholder='Enter staff email'
-                    value={staff_email ? staff_email : edit && edit.staff_email}
-                    onChange={handleChange('staff_email')}
-                  />
-                </div>
-                <div className='form-group mb-4 col-md-8 mx-auto'>
-                  <label className='form-label'>Staff Phone</label>
-                  <input
-                    type='text'
-                    className='form-control shadow-none rounded-0'
-                    placeholder='Enter staff phone'
-                    value={staff_phone ? staff_phone : edit && edit.staff_phone}
-                    onChange={handleChange('staff_phone')}
-                  />
-                </div>
-                <div className='form-group mb-4 col-md-8 mx-auto'>
-                  <label className='form-label'>Staff Image</label>
-                  <input
-                    type='text'
-                    className='form-control shadow-none rounded-0'
-                    placeholder='Enter staff name'
-                    value={staff_image ? staff_image : edit && edit.staff_image}
-                    onChange={handleChange('staff_image')}
-                  />
-                </div>
-                <div className='form-group mb-4 col-md-8 mx-auto'>
-                  <h6>Department</h6>
-                  <select
-                    className='form-select shadow-none rounded-0'
-                    aria-label='Default select example'
-                    onChange={handleChange('department')}
-                    value={department ? department : edit && edit.department}
-                  >
-                    <option></option>
-                    {departments &&
-                      departments.length > 0 &&
-                      departments.map((d, i) => {
-                        return (
-                          <option key={i} value={d.department_id}>
-                            {d.department_name}
-                          </option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </form>
-            </div>
-            <div className='modal-footer'>
-              <button
-                id='modal'
-                type='button'
-                className='btn btn-primary'
-                data-bs-dismiss={!error && 'modal'}
-                onClick={handleSubmit}
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Staff</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text color={'red'} mb='4' align='center'>
+              {error}
+            </Text>
+            <Stack spacing={4}>
+              <FormControl id='staff_name'>
+                <Input
+                  type='text'
+                  placeholder='Name'
+                  value={staff_name ? staff_name : edit && edit.staff_name}
+                  onChange={handleChange('staff_name')}
+                />
+              </FormControl>
+              <FormControl id='staff_email'>
+                <Input
+                  type='email'
+                  placeholder='Email'
+                  value={staff_email ? staff_email : edit && edit.staff_email}
+                  onChange={handleChange('staff_email')}
+                />
+              </FormControl>
+              <FormControl id='staff_phone'>
+                <Input
+                  type='text'
+                  placeholder='Phone'
+                  value={staff_phone ? staff_phone : edit && edit.staff_phone}
+                  onChange={handleChange('staff_phone')}
+                />
+              </FormControl>
+              <FormControl id='staff_address'>
+                <Input
+                  type='text'
+                  placeholder='Address'
+                  value={
+                    staff_address ? staff_address : edit && edit.staff_address
+                  }
+                  onChange={handleChange('staff_address')}
+                />
+              </FormControl>
+              <FormControl id='staff_image'>
+                <Input
+                  type='text'
+                  placeholder='Image'
+                  value={staff_image ? staff_image : edit && edit.staff_image}
+                  onChange={handleChange('staff_image')}
+                />
+              </FormControl>
+              <FormControl id='staff_department'>
+                <Select
+                  onChange={handleChange('department')}
+                  value={department ? department : edit && edit.department}
+                  placeholder='Select department'
+                >
+                  {departments &&
+                    departments.length > 0 &&
+                    departments.map((d, i) => {
+                      return (
+                        <option key={i} value={d.department_id}>
+                          {d.department_name}
+                        </option>
+                      );
+                    })}
+                </Select>
+              </FormControl>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              bg='blue.600'
+              color='white'
+              onClick={handleSubmit}
+              _hover={{
+                bg: 'blue.500',
+              }}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
