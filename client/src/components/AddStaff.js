@@ -3,7 +3,6 @@ import { addNewStaff } from '../actions/staff';
 import { message } from 'antd';
 import { useState } from 'react';
 import { isAuthenticated } from '../actions/auth';
-
 import {
   FormControl,
   Input,

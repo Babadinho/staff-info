@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { isAuthenticated } from './actions/auth';
 
-//components
 import Login from './auth/Login';
 import Staff from './dashboard/Staff';
 

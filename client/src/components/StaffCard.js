@@ -1,3 +1,6 @@
+import React from 'react';
+import { Popconfirm } from 'antd';
+import EditStaff from './EditStaff';
 import {
   Heading,
   Avatar,
@@ -9,9 +12,6 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { Popconfirm } from 'antd';
-import React from 'react';
-import EditStaff from './EditStaff';
 
 const StaffCard = ({
   s,

@@ -67,6 +67,21 @@ exports.addStaff = async (req, res) => {
   }
 };
 
+exports.searchStaff = async (req, res) => {
+  const { search } = req.body;
+
+  try {
+    const staff = await pool.query(
+      `SELECT * FROM staff WHERE staff_name ILIKE '%${search}%'`
+    );
+    if (staff) {
+      return res.json(staff.rows);
+    }
+  } catch (err) {
+    res.json(err);
+  }
+};
+
 exports.updateStaff = (req, res) => {
   const { staff_id } = req.body;
 
@@ -114,21 +129,6 @@ exports.deleteStaff = async (req, res) => {
       return res.status(200).json('Staff deleted successfully!');
     } else {
       res.status(400).json('Staff does not exist!');
-    }
-  } catch (err) {
-    res.json(err);
-  }
-};
-
-exports.searchStaff = async (req, res) => {
-  const { search } = req.body;
-
-  try {
-    const staff = await pool.query(
-      `SELECT * FROM staff WHERE staff_name ILIKE '%${search}%'`
-    );
-    if (staff) {
-      return res.json(staff.rows);
     }
   } catch (err) {
     res.json(err);

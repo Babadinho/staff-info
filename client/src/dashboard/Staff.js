@@ -78,7 +78,8 @@ const Staff = () => {
     }
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     try {
       const res = await searchStaff({ search }, token);
       setStaff(res.data);
