@@ -14,8 +14,10 @@ import {
   useDisclosure,
   SimpleGrid,
   Link,
+  Button,
 } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
+import Pagination from '@choc-ui/paginator';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { getDepartments, getDepartment } from '../actions/department';
 import { getStaff, deleteStaff, searchStaff } from '../actions/staff';
 import AddStaff from '../components/AddStaff';
@@ -26,10 +28,14 @@ import StaffCard from '../components/StaffCard';
 const Staff = () => {
   const { user, token } = isAuthenticated();
   const [departments, setDepartments] = useState();
-  const [staff, setStaff] = useState();
+  const [staff, setStaff] = useState([]);
   const [edit, setEdit] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [current, setCurrent] = useState(1);
+  const pageSize = 8;
+  const offset = (current - 1) * pageSize;
+  const staff_data = staff.slice(offset, offset + pageSize);
   const [values, setValues] = useState({
     staff_name: '',
     staff_email: '',
@@ -97,6 +103,26 @@ const Staff = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('staff-info');
     window.location.reload();
+  };
+
+  const Prev = forwardRef((props, ref) => (
+    <Button ref={ref} {...props}>
+      Prev
+    </Button>
+  ));
+  const Next = forwardRef((props, ref) => (
+    <Button ref={ref} {...props}>
+      Next
+    </Button>
+  ));
+
+  const itemRender = (_, type) => {
+    if (type === 'prev') {
+      return Prev;
+    }
+    if (type === 'next') {
+      return Next;
+    }
   };
 
   const NavItem = (props) => {
@@ -277,9 +303,9 @@ const Staff = () => {
 
           <Box as='main' p='4'>
             <SimpleGrid minChildWidth='300px' spacing='15px'>
-              {staff &&
-                staff.length > 0 &&
-                staff.map((s, i) => {
+              {staff_data &&
+                staff_data.length > 0 &&
+                staff_data.map((s, i) => {
                   return (
                     <StaffCard
                       s={s}
@@ -297,6 +323,20 @@ const Staff = () => {
                   );
                 })}
             </SimpleGrid>
+            <Pagination
+              current={current}
+              onChange={(page) => {
+                setCurrent(page);
+              }}
+              pageSize={pageSize}
+              total={staff && staff.length}
+              itemRender={itemRender}
+              paginationProps={{
+                mt: '1rem',
+                display: 'flex',
+              }}
+              colorScheme='blue'
+            />
           </Box>
         </Box>
         <AddStaff

@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@chakra-ui/react": "^2.3.5",
+    "@choc-ui/paginator": "^3.4.0",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@nextui-org/react": "^1.0.0-beta.10",
